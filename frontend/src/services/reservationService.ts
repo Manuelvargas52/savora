@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-// Configuración de Axios
+// Configuración de conexión con el backend
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -37,6 +37,7 @@ export interface ReservationResponse {
   guests: number
   status: string
   comments: string | null
+
   restaurant: {
     id: number
     name: string
@@ -44,11 +45,13 @@ export interface ReservationResponse {
     city: string
     imageUrl: string | null
   }
+
   table: {
     id: number
     tableNumber: number
     capacity: number
   }
+
   customer: {
     id: number
     fullName: string

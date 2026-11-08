@@ -1,4 +1,3 @@
-
 import axios from 'axios'
 
 export interface Restaurant {
@@ -19,18 +18,21 @@ export interface Restaurant {
     priceLevel: string | null
 }
 
+// Configuración de conexión con el backend
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'https://savora-backend-0ewz.onrender.com/api',
+    baseURL: import.meta.env.VITE_API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
 })
 
+// Consultar todos los restaurantes
 export const getRestaurants = async (): Promise<Restaurant[]> => {
     const response = await api.get<Restaurant[]>('/restaurants')
     return response.data
 }
 
+// Consultar un restaurante por su ID
 export const getRestaurantById = async (
     id: number
 ): Promise<Restaurant> => {
@@ -38,6 +40,7 @@ export const getRestaurantById = async (
     return response.data
 }
 
+// Consultar restaurantes por categoría
 export const getRestaurantsByCategory = async (
     category: string
 ): Promise<Restaurant[]> => {
@@ -48,6 +51,7 @@ export const getRestaurantsByCategory = async (
     return response.data
 }
 
+// Buscar restaurantes por nombre
 export const searchRestaurants = async (
     name: string
 ): Promise<Restaurant[]> => {
