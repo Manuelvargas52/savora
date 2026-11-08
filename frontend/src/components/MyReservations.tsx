@@ -249,9 +249,7 @@ const MyReservations = () => {
     return `${day}/${month}/${year}`
   }
 
-  const currentEditingReservation = reservations.find(
-    (reservation) => reservation.id === editingId
-  )
+
 
   return (
     <section className="bg-[#faf9f6] px-6 py-20">
