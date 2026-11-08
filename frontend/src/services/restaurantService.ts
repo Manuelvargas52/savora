@@ -20,7 +20,7 @@ export interface Restaurant {
 }
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: import.meta.env.VITE_API_URL || 'https://savora-backend-0ewz.onrender.com/api',
     headers: {
         'Content-Type': 'application/json',
     },
