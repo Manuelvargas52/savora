@@ -1,15 +1,23 @@
-
 import { useEffect, useMemo, useState } from 'react'
 import { MapPin, Search, Star, Users } from 'lucide-react'
+
 import ReservationForm from './ReservationForm'
+
 import {
     getRestaurants,
     type Restaurant,
 } from '../services/restaurantService'
 
+import {
+    getRestaurantImage,
+    getDefaultRestaurantImage,
+} from '../utils/restaurantImages'
+
 function RestaurantList() {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
-    const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(null)
+    const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(
+        null
+    )
     const [search, setSearch] = useState('')
     const [category, setCategory] = useState('Todos')
     const [loading, setLoading] = useState(true)
@@ -25,6 +33,7 @@ function RestaurantList() {
                 setRestaurants(data)
             } catch (error) {
                 console.error('Error al consultar restaurantes:', error)
+
                 setError(
                     'No fue posible cargar los restaurantes. Verifica que el backend esté funcionando.'
                 )
@@ -53,11 +62,7 @@ function RestaurantList() {
             const matchesCategory =
                 category === 'Todos' || restaurant.category === category
 
-            return (
-                matchesSearch &&
-                matchesCategory &&
-                restaurant.active
-            )
+            return matchesSearch && matchesCategory && restaurant.active
         })
     }, [restaurants, search, category])
 
@@ -127,8 +132,8 @@ function RestaurantList() {
                                 key={item}
                                 onClick={() => setCategory(item)}
                                 className={`rounded-full px-5 py-2.5 text-sm font-semibold transition ${category === item
-                                    ? 'bg-[#19352b] text-white'
-                                    : 'border border-[#e2e4dd] bg-white text-[#718078] hover:border-[#19352b]'
+                                        ? 'bg-[#19352b] text-white'
+                                        : 'border border-[#e2e4dd] bg-white text-[#718078] hover:border-[#19352b]'
                                     }`}
                             >
                                 {item}
@@ -144,12 +149,17 @@ function RestaurantList() {
                             >
                                 <div className="relative">
                                     <img
-                                        src={
-                                            restaurant.imageUrl ||
-                                            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900'
-                                        }
+                                        src={getRestaurantImage(
+                                            restaurant.name,
+                                            restaurant.imageUrl
+                                        )}
                                         alt={restaurant.name}
                                         className="h-56 w-full object-cover"
+                                        loading="lazy"
+                                        onError={(event) => {
+                                            event.currentTarget.onerror = null
+                                            event.currentTarget.src = getDefaultRestaurantImage()
+                                        }}
                                     />
 
                                     <span className="absolute right-4 top-4 rounded-full bg-white px-3 py-2 text-sm font-bold shadow">
@@ -217,9 +227,11 @@ function RestaurantList() {
 
             {selectedRestaurant && (
                 <ReservationForm
-                    restaurantId={restaurants.find(
-                        (restaurant) => restaurant.name === selectedRestaurant
-                    )!.id}
+                    restaurantId={
+                        restaurants.find(
+                            (restaurant) => restaurant.name === selectedRestaurant
+                        )!.id
+                    }
                     restaurantName={selectedRestaurant}
                     onClose={() => setSelectedRestaurant(null)}
                 />

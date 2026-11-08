@@ -23,8 +23,10 @@ import {
   getAvailableReservationTimes,
 } from '../services/reservationService'
 
-const FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900'
+import {
+  getRestaurantImage,
+  getDefaultRestaurantImage,
+} from '../utils/restaurantImages'
 
 const MyReservations = () => {
   const [email, setEmail] = useState('')
@@ -203,15 +205,15 @@ const MyReservations = () => {
         previous.map((reservation) =>
           reservation.id === editingId
             ? {
-              ...reservation,
-              reservationDate: updatedReservation.reservationDate,
-              reservationTime: updatedReservation.reservationTime,
-              durationMinutes: updatedReservation.durationMinutes,
-              guests: updatedReservation.guests,
-              status: updatedReservation.status,
-              comments: editComments,
-              table: updatedReservation.table,
-            }
+                ...reservation,
+                reservationDate: updatedReservation.reservationDate,
+                reservationTime: updatedReservation.reservationTime,
+                durationMinutes: updatedReservation.durationMinutes,
+                guests: updatedReservation.guests,
+                status: updatedReservation.status,
+                comments: editComments,
+                table: updatedReservation.table,
+              }
             : reservation
         )
       )
@@ -337,15 +339,18 @@ const MyReservations = () => {
               key={reservation.id}
               className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm"
             >
-              {/* Imagen del restaurante con respaldo */}
+              {/* Imagen sincronizada con el catálogo */}
               <img
-                src={reservation.restaurant.imageUrl || FALLBACK_IMAGE}
+                src={getRestaurantImage(
+                  reservation.restaurant.name,
+                  reservation.restaurant.imageUrl
+                )}
                 alt={reservation.restaurant.name}
                 className="h-48 w-full object-cover"
                 loading="lazy"
                 onError={(event) => {
                   event.currentTarget.onerror = null
-                  event.currentTarget.src = FALLBACK_IMAGE
+                  event.currentTarget.src = getDefaultRestaurantImage()
                 }}
               />
 
@@ -356,12 +361,13 @@ const MyReservations = () => {
                   </span>
 
                   <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${reservation.status === 'CANCELLED'
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      reservation.status === 'CANCELLED'
                         ? 'bg-red-100 text-red-700'
                         : reservation.status === 'CONFIRMED'
                           ? 'bg-green-100 text-green-700'
                           : 'bg-amber-100 text-amber-700'
-                      }`}
+                    }`}
                   >
                     {getStatusLabel(reservation.status)}
                   </span>
