@@ -132,8 +132,8 @@ function RestaurantList() {
                                 key={item}
                                 onClick={() => setCategory(item)}
                                 className={`rounded-full px-5 py-2.5 text-sm font-semibold transition ${category === item
-                                        ? 'bg-[#19352b] text-white'
-                                        : 'border border-[#e2e4dd] bg-white text-[#718078] hover:border-[#19352b]'
+                                    ? 'bg-[#19352b] text-white'
+                                    : 'border border-[#e2e4dd] bg-white text-[#718078] hover:border-[#19352b]'
                                     }`}
                             >
                                 {item}
@@ -149,10 +149,7 @@ function RestaurantList() {
                             >
                                 <div className="relative">
                                     <img
-                                        src={getRestaurantImage(
-                                            restaurant.name,
-                                            restaurant.imageUrl
-                                        )}
+                                        src={getRestaurantImage(restaurant.name)}
                                         alt={restaurant.name}
                                         className="h-56 w-full object-cover"
                                         loading="lazy"

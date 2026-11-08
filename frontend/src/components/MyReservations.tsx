@@ -205,15 +205,15 @@ const MyReservations = () => {
         previous.map((reservation) =>
           reservation.id === editingId
             ? {
-                ...reservation,
-                reservationDate: updatedReservation.reservationDate,
-                reservationTime: updatedReservation.reservationTime,
-                durationMinutes: updatedReservation.durationMinutes,
-                guests: updatedReservation.guests,
-                status: updatedReservation.status,
-                comments: editComments,
-                table: updatedReservation.table,
-              }
+              ...reservation,
+              reservationDate: updatedReservation.reservationDate,
+              reservationTime: updatedReservation.reservationTime,
+              durationMinutes: updatedReservation.durationMinutes,
+              guests: updatedReservation.guests,
+              status: updatedReservation.status,
+              comments: editComments,
+              table: updatedReservation.table,
+            }
             : reservation
         )
       )
@@ -341,10 +341,7 @@ const MyReservations = () => {
             >
               {/* Imagen sincronizada con el catálogo */}
               <img
-                src={getRestaurantImage(
-                  reservation.restaurant.name,
-                  reservation.restaurant.imageUrl
-                )}
+                src={getRestaurantImage(reservation.restaurant.name)}
                 alt={reservation.restaurant.name}
                 className="h-48 w-full object-cover"
                 loading="lazy"
@@ -361,13 +358,12 @@ const MyReservations = () => {
                   </span>
 
                   <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                      reservation.status === 'CANCELLED'
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${reservation.status === 'CANCELLED'
                         ? 'bg-red-100 text-red-700'
                         : reservation.status === 'CONFIRMED'
                           ? 'bg-green-100 text-green-700'
                           : 'bg-amber-100 text-amber-700'
-                    }`}
+                      }`}
                   >
                     {getStatusLabel(reservation.status)}
                   </span>
