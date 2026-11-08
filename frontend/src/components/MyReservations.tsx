@@ -1,6 +1,4 @@
-
 import { useEffect, useState } from 'react'
-
 import {
   CalendarDays,
   Clock3,
@@ -25,10 +23,12 @@ import {
   getAvailableReservationTimes,
 } from '../services/reservationService'
 
+const FALLBACK_IMAGE =
+  'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900'
+
 const MyReservations = () => {
   const [email, setEmail] = useState('')
   const [reservations, setReservations] = useState<MyReservation[]>([])
-
   const [loading, setLoading] = useState(false)
   const [cancellingId, setCancellingId] = useState<number | null>(null)
   const [editingId, setEditingId] = useState<number | null>(null)
@@ -203,15 +203,15 @@ const MyReservations = () => {
         previous.map((reservation) =>
           reservation.id === editingId
             ? {
-                ...reservation,
-                reservationDate: updatedReservation.reservationDate,
-                reservationTime: updatedReservation.reservationTime,
-                durationMinutes: updatedReservation.durationMinutes,
-                guests: updatedReservation.guests,
-                status: updatedReservation.status,
-                comments: editComments,
-                table: updatedReservation.table,
-              }
+              ...reservation,
+              reservationDate: updatedReservation.reservationDate,
+              reservationTime: updatedReservation.reservationTime,
+              durationMinutes: updatedReservation.durationMinutes,
+              guests: updatedReservation.guests,
+              status: updatedReservation.status,
+              comments: editComments,
+              table: updatedReservation.table,
+            }
             : reservation
         )
       )
@@ -249,12 +249,9 @@ const MyReservations = () => {
     return `${day}/${month}/${year}`
   }
 
-
-
   return (
     <section className="bg-[#faf9f6] px-6 py-20">
       <div className="mx-auto max-w-6xl">
-
         {/* Encabezado */}
         <div className="mb-10 text-center">
           <span className="text-sm font-semibold uppercase tracking-widest text-orange-600">
@@ -340,17 +337,17 @@ const MyReservations = () => {
               key={reservation.id}
               className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm"
             >
-              {reservation.restaurant.imageUrl ? (
-                <img
-                  src={reservation.restaurant.imageUrl}
-                  alt={reservation.restaurant.name}
-                  className="h-48 w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-48 items-center justify-center bg-gray-100">
-                  <Utensils className="h-12 w-12 text-gray-400" />
-                </div>
-              )}
+              {/* Imagen del restaurante con respaldo */}
+              <img
+                src={reservation.restaurant.imageUrl || FALLBACK_IMAGE}
+                alt={reservation.restaurant.name}
+                className="h-48 w-full object-cover"
+                loading="lazy"
+                onError={(event) => {
+                  event.currentTarget.onerror = null
+                  event.currentTarget.src = FALLBACK_IMAGE
+                }}
+              />
 
               <div className="p-6">
                 <div className="mb-3 flex items-center justify-between gap-3">
@@ -359,13 +356,12 @@ const MyReservations = () => {
                   </span>
 
                   <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                      reservation.status === 'CANCELLED'
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${reservation.status === 'CANCELLED'
                         ? 'bg-red-100 text-red-700'
                         : reservation.status === 'CONFIRMED'
                           ? 'bg-green-100 text-green-700'
                           : 'bg-amber-100 text-amber-700'
-                    }`}
+                      }`}
                   >
                     {getStatusLabel(reservation.status)}
                   </span>
@@ -439,7 +435,6 @@ const MyReservations = () => {
         {editingId !== null && (
           <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4">
             <div className="my-auto w-full max-w-lg rounded-3xl bg-white p-6 shadow-xl">
-
               <div className="mb-6 flex items-center justify-between">
                 <div>
                   <span className="text-xs font-semibold uppercase tracking-widest text-orange-600">
@@ -469,7 +464,6 @@ const MyReservations = () => {
               </div>
 
               <div className="space-y-4">
-
                 {/* Fecha */}
                 <div>
                   <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -602,7 +596,6 @@ const MyReservations = () => {
                     {saving ? 'Guardando...' : 'Guardar cambios'}
                   </button>
                 </div>
-
               </div>
             </div>
           </div>
