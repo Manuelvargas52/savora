@@ -1,75 +1,123 @@
-# React + TypeScript + Vite
+# Frontend — Savora
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Interfaz web para consultar restaurantes y gestionar reservas.
 
-Currently, two official plugins are available:
+## 📌 Descripción
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+El frontend de Savora presenta la experiencia de usuario y consume los endpoints REST expuestos por el backend.
 
-## React Compiler
+## 🧰 Tecnologías
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React:** construcción de interfaces.
+- **TypeScript:** tipado estático.
+- **Vite:** servidor de desarrollo y herramienta de compilación.
+- **Tailwind CSS:** estilos de interfaz.
+- **Axios:** comunicación HTTP con el backend.
+- **Vercel:** despliegue del frontend.
 
-## Expanding the ESLint configuration
+## ⚙️ Requisitos
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js.
+- npm.
+- Backend disponible en local o en un entorno remoto.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📥 Instalación
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Desde la carpeta `frontend`:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## 🔑 Variables de entorno
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Crea el archivo `.env.development` en la raíz de `frontend`:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```env
+VITE_API_URL=http://localhost:8080/api
 ```
+
+Para producción, configura en Vercel la variable:
+
+```text
+VITE_API_URL=https://savora-backend-0ewz.onrender.com/api
+```
+
+> No almacenes contraseñas, tokens ni secretos en variables `VITE_*`. Sus valores pueden quedar expuestos en el navegador.
+
+## ▶️ Ejecución en desarrollo
+
+```bash
+npm run dev
+```
+
+Dirección local habitual: `http://localhost:5173`.
+
+## 🏗️ Compilación
+
+```bash
+npm run build
+```
+
+Para servir localmente el resultado de la compilación:
+
+```bash
+npm run preview
+```
+
+## 🔌 Comunicación con el backend
+
+Los servicios frontend deben utilizar la configuración centralizada de Axios y la variable `VITE_API_URL`.
+
+Ejemplo de configuración:
+
+```ts
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export default api;
+```
+
+## 🖼️ Recursos estáticos
+
+Los archivos ubicados en `public` se sirven desde la raíz del sitio. Por ejemplo:
+
+```text
+public/
+└── projects/
+    └── savora-home.png
+```
+
+Se referencia en la aplicación como:
+
+```text
+/projects/savora-home.png
+```
+
+## 🚀 Despliegue en Vercel
+
+Configuración del proyecto:
+
+| Opción | Valor |
+|---|---|
+| Root Directory | `frontend` |
+| Framework Preset | Vite |
+| Install Command | `npm install` |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+
+Configura `VITE_API_URL` en los entornos de Vercel que correspondan (Production y Preview).
+
+## 🧪 Flujo recomendado
+
+1. Iniciar el backend local.
+2. Iniciar el frontend con `npm run dev`.
+3. Probar las funcionalidades contra la base de datos local.
+4. Ejecutar `npm run build`.
+5. Enviar los cambios a GitHub cuando estén listos.
